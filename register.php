@@ -38,7 +38,8 @@ if(isset($_POST['SignInButton'])){
    if($result->num_rows>0){
     session_start();
     $row=$result->fetch_assoc();
-    $_SESSION['email']=$row['email'];
+    $_SESSION['user_id'] = $row['id'];
+    $_SESSION['email'] = $row['email']; 
     header("Location: home.php");
     exit();
    }
@@ -47,4 +48,5 @@ if(isset($_POST['SignInButton'])){
    }
 
 }
+
 ?>
