@@ -29,36 +29,37 @@ include("connect.php");
             </div>
             <div class="cgpa-card">
                 <span style="font-weight: bold;"><h2>CGPA</h2></span>
-                <div class="cgpa-circle" id="cgpaValue">0.0</div>
+                <div class="cgpa-circle" id="cgpaValue">3.44</div>
             </div>
         </div>
 
         <div class="semester-grid" id="semesterGrid">
-            <!-- Semester cards will be added here -->
-            <div class="add-semester" onclick="location.href='addresult.php'">
+            <!-- New Semester Cards will be added here -->
+            <div class="add-semester" onclick="addSemester()">
                 <div class="plus-icon">+</div>
             </div>
         </div>
-    </div>
 
-    <!-- Modal for semester details -->
-    <div id="semesterModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2 id="modalTitle"></h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Subject</th>
-                        <th>Grade</th>
-                        <th>Credits</th>
-                    </tr>
-                </thead>
-                <tbody id="modalBody">
-                </tbody>
-            </table>
-        </div>
     </div>
+    <script>
+        let semesterCount = 1;
+        function addSemester() {
+            const grid = document.getElementById('semesterGrid');
 
+            const newSemester = document.createElement('div');
+            newSemester.className = 'semester-card large';
+            newSemester.innerHTML = `
+                <h2>Semester ${semesterCount}</h2>
+                <p>GPA: </p>
+            `;
+
+            const addButton = document.querySelector('.add-semester');
+            grid.insertBefore(newSemester, addButton);
+        }
+
+    </script>
+
+    
 </body>
 </html>
+

@@ -32,7 +32,7 @@ if (isset($_POST['savebutton'])) {
             $grade = $subject['grade'];
             $credits = $subject['credits'];
 
-            $insertQuery = "INSERT INTO course (sem, course_name, result, credits,id) 
+            $insertQuery = "INSERT INTO course (sem, course_name, result, credits,user_id) 
                             VALUES ('$sem_no', '$name', '$grade', '$credits','$user_id')";
             
             if (!$conn->query($insertQuery)) {

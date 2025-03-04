@@ -1,0 +1,139 @@
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="name-card">
+                <h2 id="studentName">Name</h2>
+            </div>
+            <div class="cgpa-card">
+                <span>CGPA</span>
+                <div class="cgpa-circle" id="cgpaValue">0.0</div>
+            </div>
+        </div>
+
+        <div class="semester-grid" id="semesterGrid">
+            <!-- Semester cards will be added here -->
+        </div>
+    </div>
+
+    <!-- Modal for adding results -->
+    <div id="addResultModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Add Result for <span id="modalSemesterTitle"></span></h2>
+            <form id="addResultForm">
+                <div class="form-group">
+                    <label for="subjectName">Subject Name</label>
+                    <input type="text" id="subjectName" required>
+                </div>
+                <div class="form-group">
+                    <label for="grade">Grade</label>
+                    <select id="grade" required>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="F">F</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="credits">Credits</label>
+                    <input type="number" id="credits" min="1" max="6" required>
+                </div>
+                <div class="form-group">
+                    <button type="submit">Add Subject</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let currentSemester = 0;
+        const results = JSON.parse(localStorage.getItem('semesterResults')) || Array(8).fill().map(() => ({ subjects: [] }));
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const studentName = localStorage.getItem('studentName') || 'Name';
+            document.getElementById('studentName').textContent = studentName;
+
+            const semesterGrid = document.getElementById('semesterGrid');
+            for (let i = 0; i < 8; i++) {
+                const card = createSemesterCard(i + 1);
+                semesterGrid.appendChild(card);
+            }
+
+            updateCGPA();
+        });
+
+        function createSemesterCard(semesterNumber) {
+            const card = document.createElement('div');
+            card.className = 'semester-card';
+            card.innerHTML = `
+                <h3>Semester ${semesterNumber}</h3>
+                <p id="sgpa-${semesterNumber}">SGPA: ${calculateSGPA(results[semesterNumber - 1].subjects).toFixed(2)}</p>
+                <div class="plus-icon" onclick="openAddResultModal(${semesterNumber})">+</div>
+            `;
+            return card;
+        }
+
+        function openAddResultModal(semesterNumber) {
+            currentSemester = semesterNumber;
+            document.getElementById('modalSemesterTitle').textContent = `Semester ${semesterNumber}`;
+            document.getElementById('addResultModal').style.display = 'block';
+        }
+
+        document.querySelector('.close').onclick = function() {
+            document.getElementById('addResultModal').style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('addResultModal')) {
+                document.getElementById('addResultModal').style.display = 'none';
+            }
+        }
+
+        document.getElementById('addResultForm').onsubmit = function(e) {
+            e.preventDefault();
+            const subject = {
+                name: document.getElementById('subjectName').value,
+                grade: document.getElementById('grade').value,
+                credits: parseInt(document.getElementById('credits').value)
+            };
+            results[currentSemester - 1].subjects.push(subject);
+            localStorage.setItem('semesterResults', JSON.stringify(results));
+            updateSGPA(currentSemester);
+            updateCGPA();
+            this.reset();
+            document.getElementById('addResultModal').style.display = 'none';
+        }
+
+        function calculateSGPA(subjects) {
+            if (subjects.length === 0) return 0;
+            const gradePoints = { 'A': 4, 'B': 3, 'C': 2, 'D': 1, 'F': 0 };
+            let totalPoints = 0;
+            let totalCredits = 0;
+            subjects.forEach(subject => {
+                totalPoints += gradePoints[subject.grade] * subject.credits;
+                totalCredits += subject.credits;
+            });
+            return totalCredits > 0 ? totalPoints / totalCredits : 0;
+        }
+
+        function updateSGPA(semesterNumber) {
+            const sgpa = calculateSGPA(results[semesterNumber - 1].subjects);
+            document.getElementById(`sgpa-${semesterNumber}`).textContent = `SGPA: ${sgpa.toFixed(2)}`;
+        }
+
+        function updateCGPA() {
+            let totalGPA = 0;
+            let semestersWithResults = 0;
+            results.forEach(result => {
+                if (result.subjects.length > 0) {
+                    totalGPA += calculateSGPA(result.subjects);
+                    semestersWithResults++;
+                }
+            });
+            const cgpa = semestersWithResults > 0 ? totalGPA / semestersWithResults : 0;
+            document.getElementById('cgpaValue').textContent = cgpa.toFixed(2);
+        }
+    </script>
+</body>
+</html>
