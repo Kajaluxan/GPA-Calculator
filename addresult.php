@@ -83,6 +83,7 @@
 
         // Automatically add the first subject field when the page loads
         window.onload = addSubject;
+        
     </script>
 
 </body>
