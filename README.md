@@ -1,7 +1,7 @@
 ## GPA Tracker
 
 ## Overview
-This GPA Tracker is a simple tool designed to help students monitor their academic performance by tracking grades and calculating GPAs based on course credits. It aims to provide a quick and efficient way to track progress and make informed decisions about academic goals.
+This GPA Tracker is a simple tool designed to help students monitor their academic performance by tracking grades and calculating GPAs based on course credits. It aims to provide a quick and efficient way to track progress and make informed decisions about academic goals
 
 ## Features
 - **Automated GPA Calculation: Automatically calculates GPA based on course grades and credits.**
