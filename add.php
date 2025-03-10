@@ -71,17 +71,16 @@ if (isset($_POST['savebutton'])) {
     if ($gpa_total_credits > 0) {
         $gpa = $gpa_total_points / $gpa_total_credits;
         $gpa = number_format($gpa, 2, '.', '');
-
         // Insert GPA into the semester table
-        $insertSemsterQuery = "INSERT INTO semster (sem_id, gpa, tot_cre, user_id) 
+        $insertSemesterQuery = "INSERT INTO semester (sem_id,gpa, tot_cre,user_id) 
                                VALUES ('$sem_no', '$gpa', '$gpa_total_credits', '$user_id')";
-        if ($conn->query($insertSemsterQuery)) {
+        if ($conn->query($insertSemesterQuery)) {
             
             // Now calculate the CGPA (cumulative GPA)
             // Retrieve all the GPA records from the semester table for the user
             $cgpa_total_points = 0;
             $cgpa_total_credits = 0;
-            $selectGpaQuery = "SELECT gpa, tot_cre FROM semster WHERE user_id = '$user_id'";
+            $selectGpaQuery = "SELECT gpa, tot_cre FROM semester WHERE user_id = '$user_id'";
             $gpaResult = $conn->query($selectGpaQuery);
 
             if ($gpaResult->num_rows > 0) {
@@ -100,7 +99,7 @@ if (isset($_POST['savebutton'])) {
             }
 
             // Update the user's CGPA (you can store this in the user's table or wherever appropriate)
-            $updateCgpaQuery = "UPDATE users SET cgpa = '$cgpa' WHERE id = '$user_id'";
+            $updateCgpaQuery = "UPDATE users SET cgpa = '$cgpa' WHERE users.id = '$user_id'";
             if ($conn->query($updateCgpaQuery)) {
                 header("Location: home.php?result_added=true");
                 exit();  // Stop further execution

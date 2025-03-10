@@ -334,7 +334,7 @@ include("connect.php");
                     <?php
                     if (isset($_SESSION['user_id'])) {
                         $user_id = $_SESSION['user_id'];
-                        $query = mysqli_query($conn, "SELECT cgpa FROM `users` WHERE users.id='$user_id'");
+                        $query = mysqli_query($conn, "SELECT cgpa FROM `users` WHERE id='$user_id'");
                         while ($row = mysqli_fetch_array($query)) {
                             echo $row['cgpa'];
                         }
@@ -349,7 +349,7 @@ include("connect.php");
                 $user_id = $_SESSION['user_id'] ?? null;
 
                 if ($user_id) {
-                    $semesters_query = mysqli_query($conn, "SELECT sem_id, gpa FROM semster WHERE user_id='$user_id' ORDER BY sem_id ASC");
+                    $semesters_query = mysqli_query($conn, "SELECT sem_id, gpa FROM semester WHERE user_id='$user_id' ORDER BY sem_id ASC");
 
                     while ($semester = mysqli_fetch_array($semesters_query)) {
                         $sem_id = $semester['sem_id'];
